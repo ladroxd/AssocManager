@@ -1,0 +1,47 @@
+{% extends 'membres/base.html' %}
+{% block titre %}{{ titre }}{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>{{ titre }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i>Enregistrer
+                        </button>
+                        <a href="{% url 'liste_membres' %}" class="btn btn-outline-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.classList.add('form-control');
+    if (el.tagName === 'SELECT') {
+        el.classList.replace('form-control', 'form-select');
+    }
+    if (el.type === 'checkbox') {
+        el.classList.remove('form-control');
+        el.classList.add('form-check-input');
+    }
+});
+</script>
+{% endblock %}

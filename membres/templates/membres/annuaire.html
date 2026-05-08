@@ -1,0 +1,82 @@
+{% extends 'membres/base.html' %}
+{% block titre %}Annuaire des membres{% endblock %}
+
+{% block contenu %}
+<h2 class="mb-4"><i class="bi bi-book me-2"></i>Annuaire des membres</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-2">
+            <div class="col-md-4">
+                <input type="text" name="q" value="{{ recherche }}" class="form-control" placeholder="Rechercher par nom...">
+            </div>
+            <div class="col-md-3">
+                <select name="fonction" class="form-select">
+                    <option value="">Toutes les fonctions</option>
+                    {% for f in fonctions %}
+                    <option value="{{ f.pk }}" {% if fonction_id == f.pk|stringformat:"s" %}selected{% endif %}>{{ f.titre_poste }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="niveau" class="form-select">
+                    <option value="">Tous les niveaux</option>
+                    {% for val, label in niveaux %}
+                    <option value="{{ val }}" {% if niveau_selectionne == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-1"></i>Filtrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for membre in membres %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-person-circle me-2 text-primary"></i>{{ membre }}
+                </h5>
+                <p class="card-text text-muted mb-1">
+                    <i class="bi bi-briefcase me-1"></i>
+                    {{ membre.fonction|default:"Aucune fonction" }}
+                </p>
+                <p class="card-text text-muted mb-1">
+                    <i class="bi bi-mortarboard me-1"></i>
+                    {{ membre.get_niveau_scolarite_display }}
+                </p>
+                {% if membre.telephone %}
+                <p class="card-text mb-1">
+                    <i class="bi bi-telephone me-1 text-success"></i>{{ membre.telephone }}
+                </p>
+                {% endif %}
+                {% if membre.email %}
+                <p class="card-text mb-1">
+                    <i class="bi bi-envelope me-1 text-info"></i>
+                    <a href="mailto:{{ membre.email }}">{{ membre.email }}</a>
+                </p>
+                {% endif %}
+                <small class="text-muted">
+                    <i class="bi bi-clock-history me-1"></i>Ancienneté : {{ membre.anciennete }}
+                </small>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{% url 'detail_membre' membre.pk %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-eye me-1"></i>Voir le profil
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">Aucun membre trouvé.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

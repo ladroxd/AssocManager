@@ -1,0 +1,113 @@
+{% extends 'membres/base.html' %}
+{% block titre %}Tableau de bord — AssocManager{% endblock %}
+
+{% block contenu %}
+<h2 class="mb-4"><i class="bi bi-speedometer2 me-2"></i>Tableau de bord</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fs-1 fw-bold">{{ total_membres }}</div>
+                    <div>Total membres</div>
+                </div>
+                <i class="bi bi-people fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fs-1 fw-bold">{{ membres_actifs }}</div>
+                    <div>Membres actifs</div>
+                </div>
+                <i class="bi bi-person-check fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-secondary">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fs-1 fw-bold">{{ membres_archives }}</div>
+                    <div>Membres archivés</div>
+                </div>
+                <i class="bi bi-archive fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fs-1 fw-bold">{{ cotisations_payees }}</div>
+                    <div>Cotisations payées</div>
+                </div>
+                <i class="bi bi-check-circle fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fs-1 fw-bold">{{ cotisations_attente }}</div>
+                    <div>En attente</div>
+                </div>
+                <i class="bi bi-hourglass-split fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fs-1 fw-bold">{{ cotisations_impayees }}</div>
+                    <div>Cotisations impayées</div>
+                </div>
+                <i class="bi bi-x-circle fs-1 opacity-50"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header"><i class="bi bi-bar-chart me-1"></i>Membres par fonction</div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Fonction</th>
+                    <th>Responsabilité</th>
+                    <th class="text-center">Nb membres</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for f in membres_par_fonction %}
+            <tr>
+                <td>{{ f.titre_poste }}</td>
+                <td class="text-muted">{{ f.responsabilite|default:"—" }}</td>
+                <td class="text-center"><span class="badge bg-primary">{{ f.nb }}</span></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3" class="text-center text-muted">Aucune fonction enregistrée.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'liste_membres' %}" class="btn btn-primary">
+        <i class="bi bi-list-ul me-1"></i>Gérer les membres
+    </a>
+    <a href="{% url 'ajouter_membre' %}" class="btn btn-success ms-2">
+        <i class="bi bi-person-plus me-1"></i>Ajouter un membre
+    </a>
+</div>
+{% endblock %}
