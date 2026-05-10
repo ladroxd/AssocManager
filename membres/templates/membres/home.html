@@ -1,0 +1,63 @@
+{% extends 'membres/base.html' %}
+{% block titre %}Accueil — AssocManager{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-8 text-center">
+        <h1 class="display-5 fw-bold mb-3">Bienvenue dans notre Association</h1>
+        <p class="lead text-muted mb-4">
+            Notre association réunit des membres passionnés autour de valeurs communes de solidarité,
+            de développement personnel et d'engagement collectif. Nous organisons des activités éducatives,
+            culturelles et sociales tout au long de l'année pour enrichir la vie de nos membres et de la communauté.
+        </p>
+        <hr class="my-4">
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            {% if user.is_authenticated %}
+            <a href="{% url 'mon_espace' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-person-check me-2"></i>Mon espace
+            </a>
+            <a href="{% url 'annuaire' %}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-book me-2"></i>Annuaire
+            </a>
+            {% else %}
+            <a href="{% url 'connexion' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+            </a>
+            <a href="{% url 'inscription' %}" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-person-plus me-2"></i>Créer un compte
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-5">
+    <div class="col-md-4">
+        <div class="card h-100 text-center p-3">
+            <div class="card-body">
+                <i class="bi bi-people-fill fs-1 text-primary mb-3"></i>
+                <h5 class="card-title">Communauté active</h5>
+                <p class="card-text text-muted">Rejoignez une communauté dynamique et engagée.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center p-3">
+            <div class="card-body">
+                <i class="bi bi-calendar-event fs-1 text-primary mb-3"></i>
+                <h5 class="card-title">Activités régulières</h5>
+                <p class="card-text text-muted">Des événements et ateliers organisés tout au long de l'année.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 text-center p-3">
+            <div class="card-body">
+                <i class="bi bi-shield-check fs-1 text-primary mb-3"></i>
+                <h5 class="card-title">Adhésion simple</h5>
+                <p class="card-text text-muted">Créez votre compte et suivez votre adhésion en ligne.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

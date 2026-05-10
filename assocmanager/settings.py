@@ -125,4 +125,4 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 LOGIN_URL = '/connexion/'
-LOGIN_REDIRECT_URL = '/tableau-de-bord/'
+LOGIN_REDIRECT_URL = '/mon-espace/'

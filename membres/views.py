@@ -1,10 +1,51 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import Q, Count
 from .models import Membre, Fonction, Cotisation
-from .forms import MembreForm, CotisationForm
+from .forms import MembreForm, CotisationForm, InscriptionForm
 
 
+def home(request):
+    return render(request, 'membres/home.html')
+
+
+def inscription(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        form = InscriptionForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.email = form.cleaned_data['email']
+            user.first_name = form.cleaned_data['prenom']
+            user.last_name = form.cleaned_data['nom']
+            user.save()
+            Membre.objects.create(
+                user=user,
+                nom=form.cleaned_data['nom'],
+                prenom=form.cleaned_data['prenom'],
+                email=form.cleaned_data['email'],
+                telephone=form.cleaned_data.get('telephone', ''),
+            )
+            messages.success(request, 'Compte créé avec succès. Vous pouvez maintenant vous connecter.')
+            return redirect('connexion')
+    else:
+        form = InscriptionForm()
+    return render(request, 'membres/inscription.html', {'form': form})
+
+
+@login_required
+def mon_espace(request):
+    try:
+        membre = request.user.membre
+    except Membre.DoesNotExist:
+        membre = None
+    cotisations = membre.cotisations.all() if membre else []
+    return render(request, 'membres/mon_espace.html', {'membre': membre, 'cotisations': cotisations})
+
+
+@login_required
 def annuaire(request):
     membres = Membre.objects.filter(actif=True).select_related('fonction')
     recherche = request.GET.get('q', '')

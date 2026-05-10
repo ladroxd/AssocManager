@@ -1,0 +1,72 @@
+{% extends 'membres/base.html' %}
+{% block titre %}Mon espace{% endblock %}
+
+{% block contenu %}
+<h2 class="mb-4"><i class="bi bi-person-check me-2"></i>Mon espace</h2>
+
+{% if membre %}
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title"><i class="bi bi-person-circle me-2 text-primary"></i>Profil</h5>
+                <p class="mb-1"><strong>Nom :</strong> {{ membre.nom }} {{ membre.prenom }}</p>
+                <p class="mb-1"><strong>Email :</strong> {{ membre.email|default:"—" }}</p>
+                <p class="mb-1"><strong>Téléphone :</strong> {{ membre.telephone|default:"—" }}</p>
+                <p class="mb-1"><strong>Fonction :</strong> {{ membre.fonction|default:"Aucune" }}</p>
+                <p class="mb-1"><strong>Niveau :</strong> {{ membre.get_niveau_scolarite_display }}</p>
+                <p class="mb-0"><strong>Ancienneté :</strong> {{ membre.anciennete }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title mb-3"><i class="bi bi-cash-coin me-2 text-primary"></i>Suivi des cotisations</h5>
+                {% if cotisations %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Année</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for c in cotisations %}
+                            <tr>
+                                <td>{{ c.annee }}</td>
+                                <td>{{ c.montant }} DZD</td>
+                                <td>
+                                    {% if c.statut_paiement == 'paye' %}
+                                    <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Payé</span>
+                                    {% elif c.statut_paiement == 'en_attente' %}
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>En attente</span>
+                                    {% else %}
+                                    <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Impayé</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Aucune cotisation enregistrée pour le moment.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-warning">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    Votre compte n'est pas encore lié à un profil membre. Veuillez contacter l'administrateur.
+</div>
+{% endif %}
+{% endblock %}
