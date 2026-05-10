@@ -37,6 +37,8 @@ def inscription(request):
 
 @login_required
 def mon_espace(request):
+    if request.user.is_staff:
+        return redirect('tableau_de_bord')
     try:
         membre = request.user.membre
     except Membre.DoesNotExist:
